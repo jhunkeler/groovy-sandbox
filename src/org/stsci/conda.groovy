@@ -1,82 +1,3 @@
-class OSInfo {
-    public String name
-    public String version
-    public String arch
-
-    OSInfo () {
-        name = 'uname -s'.execute().text.trim()
-        if (name == 'Darwin') { name = 'MacOSX' }
-        arch = 'uname -p'.execute().text.trim()
-        if (arch.matches('^i.*86$')) { arch = 'x86' }
-
-        this.name = name
-        this.arch = arch
-        this.version = 'uname -r'.execute().text.trim()
-    }
-
-}
-
-class CondaInstaller {
-    OSInfo os
-    String prefix
-    String dist_version
-    String url
-    def dist = [:]
-
-    CondaInstaller(prefix, dist="miniconda", variant="3", version="latest") {
-        def distributions = [
-            miniconda: [name: 'Miniconda',
-                        variant: variant,
-                        baseurl: 'https://repo.continuum.io/miniconda'],
-            anaconda: [name: 'Anaconda',
-                       variant: variant,
-                       baseurl: 'https://repo.continuum.io/archive']
-        ]
-        this.os = new OSInfo()
-        this.dist = distributions."${dist}"
-        this.dist_version = version
-        this.prefix = prefix
-        this.url = "${this.dist.baseurl}/" +
-                  "${this.dist.name}${this.dist.variant}-" +
-                  "${this.dist_version}-${this.os.name}-${this.os.arch}.sh"
-    }
-
-    void download() {
-
-        println("Downloading $url")
-        File fp = new File('installer.sh')
-        def installer = fp.newOutputStream()
-        installer << new URL(this.url).openStream()
-        installer.close()
-        println("Received ${fp.length()} bytes")
-    }
-
-    int install() {
-        if (new File(this.prefix).exists()) {
-            println("Skipping installation: ${this.prefix} exists.")
-            return 0xFF
-        }
-
-        if (!new File('installer.sh').exists()) {
-            this.download()
-        }
-
-        def cmd = "bash installer.sh -b -p ${this.prefix}"
-        def proc = cmd.execute()
-        def stdout = new StringBuffer()
-
-        proc.inputStream.eachLine { println(it) }
-
-        //proc.waitForProcessOutput(stdout, System.err)
-        //print(stdout.toString())
-
-        return proc.exitValue()
-    }
-
-    private void detect() {
-    }
-}
-
 class Conda {
     public String prefix
     public boolean prefix_exists
@@ -246,6 +167,7 @@ class Conda {
     }
 }
 
+/*
 static void main(String[] args) {
     final String PREFIX = "/tmp/miniconda3"
     final String NAME = "astroconda35"
@@ -270,5 +192,4 @@ static void main(String[] args) {
     assert c.environment_name == NAME
     assert c.provides(NAME) == true
 }
-
-
+*/
