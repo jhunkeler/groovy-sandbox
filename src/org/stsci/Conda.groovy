@@ -1,3 +1,5 @@
+package org.stsci
+
 class Conda {
     public String prefix
     public boolean prefix_exists

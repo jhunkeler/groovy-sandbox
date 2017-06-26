@@ -1,3 +1,5 @@
+package org.stsci
+
 class OSInfo {
     public String name
     public String version

@@ -1,3 +1,6 @@
+package org.stsci
+import org.stsci.OSInfo
+
 class CondaInstaller {
     OSInfo os
     String prefix
