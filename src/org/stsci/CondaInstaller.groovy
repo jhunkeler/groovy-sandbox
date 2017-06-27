@@ -1,7 +1,7 @@
 package org.stsci
 import org.stsci.OSInfo
 
-class CondaInstaller {
+class CondaInstaller implements Serializable {
     OSInfo os
     String prefix
     String dist_version

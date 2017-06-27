@@ -1,6 +1,6 @@
 package org.stsci
 
-class OSInfo {
+class OSInfo implements Serializable {
     public String name
     public String version
     public String arch

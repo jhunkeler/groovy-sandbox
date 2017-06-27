@@ -1,6 +1,6 @@
 package org.stsci
 
-class Conda {
+class Conda implements Serializable {
     public String prefix
     public boolean prefix_exists
     public Map<String, String> shell_environment
