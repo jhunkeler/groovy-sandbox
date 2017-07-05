@@ -54,16 +54,16 @@ class Conda implements Serializable {
         def env_dump = this.runshell("source ${prefix}/bin/activate ${conda_env} ; printenv", true)
 
         /* Split each environment keypair by first occurance of '=' */
-        env_dump.inputStream.eachLine { line ->
-            if(line) {
-                def (k, v) = line.split('=', 2).collect { it.trim() }
-                /* Strip out envmodules if they exist, i.e. multiline variables*/
-                if (k.contains("_FUNC_") || !line.contains("=")) {
-                    return
-                }
-                records."$k" = v
-            }
-        }
+        //env_dump.inputStream.eachLine { line ->
+        //    if(line) {
+        //        def (k, v) = line.split('=', 2).collect { it.trim() }
+        //        /* Strip out envmodules if they exist, i.e. multiline variables*/
+        //        if (k.contains("_FUNC_") || !line.contains("=")) {
+        //            return
+        //        }
+        //        records."$k" = v
+        //    }
+        //}
 
         /* runshell can now natively resolve this conda installation */
         this.shell_environment = records
