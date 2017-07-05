@@ -37,7 +37,7 @@ class CondaInstaller implements Serializable {
     }
 
     int install() {
-        if (fileExists this.prefix)) {
+        if (fileExists this.prefix) {
             println("Skipping installation: ${this.prefix} exists.")
             return 0xFF
         }
