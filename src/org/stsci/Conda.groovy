@@ -10,7 +10,7 @@ class Conda implements Serializable {
 
     Conda (prefix) {
         this.prefix = prefix
-        this.prefix_exists = new File(this.prefix).exists()
+        this.prefix_exists = fileExists this.prefix
         this.shell_environment = [:]
         this.environment_name = ""
         this.channels = []
