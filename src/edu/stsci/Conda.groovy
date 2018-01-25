@@ -1,4 +1,4 @@
-package org.stsci
+package edu.stsci
 
 class Conda implements Serializable {
     public String prefix

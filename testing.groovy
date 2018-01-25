@@ -1,4 +1,4 @@
-import org.stsci.*
+import edu.stsci.*
 
 static void main(String[] args) {
     final String PREFIX = "/tmp/miniconda3"

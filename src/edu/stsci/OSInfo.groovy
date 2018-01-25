@@ -1,4 +1,4 @@
-package org.stsci
+package edu.stsci
 
 class OSInfo implements Serializable {
     public String name

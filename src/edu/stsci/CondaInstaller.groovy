@@ -1,5 +1,5 @@
-package org.stsci
-import org.stsci.OSInfo
+package edu.stsci
+import edu.stsci.OSInfo
 
 class CondaInstaller implements Serializable {
     OSInfo os
