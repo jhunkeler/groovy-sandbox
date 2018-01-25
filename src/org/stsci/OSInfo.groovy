@@ -8,7 +8,7 @@ class OSInfo implements Serializable {
     OSInfo () {
         name = 'uname -s'.execute().text.trim()
         if (name == 'Darwin') { name = 'MacOSX' }
-        arch = 'uname -p'.execute().text.trim()
+        arch = 'uname -m'.execute().text.trim()
         if (arch.matches('^i.*86$')) { arch = 'x86' }
 
         this.name = name

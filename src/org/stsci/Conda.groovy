@@ -61,7 +61,7 @@ class Conda implements Serializable {
                 if (pair[0].contains("_FUNC_") || !line.contains("=")) {
                     return
                 }
-                records."$k" = v
+                records."${pair[0]}" = pair[1]
             }
         }
 
@@ -110,6 +110,7 @@ class Conda implements Serializable {
 
         String cmd = "${prefix}/bin/conda ${task}"
         cmd += ' ' + args.join(' ')
+
         if (prompt_avoid) {
             cmd += ' ' + silent_args.join(' ')
         }
@@ -162,6 +163,15 @@ class Conda implements Serializable {
         return proc.exitcode
     }
 
+    int remove(String packages, boolean force=false) {
+        String args = ""
+        if (force) {
+            args = "--force"
+        }
+        def proc = this.command("remove", args, packages)
+        return proc.exitcode
+    }
+
     int destroy(String name) {
         String args = "-n \"${name}\""
         def proc = this.command("env remove", args)
@@ -169,29 +179,3 @@ class Conda implements Serializable {
     }
 }
 
-/*
-static void main(String[] args) {
-    final String PREFIX = "/tmp/miniconda3"
-    final String NAME = "astroconda35"
-    final String PKGS = "python=3.5 numpy=1.12 drizzlepac"
-
-    cinst = new CondaInstaller(PREFIX)
-    cinst.install()
-
-    c = new Conda(PREFIX)
-    assert c.prefix_exists == true
-
-    c.override = true
-    c.channels.add("astropy")
-    c.channels.add("http://ssb.stsci.edu/astroconda")
-    c.channels.add("conda-forge")
-
-    if (c.provides(NAME)) {
-        assert c.destroy(NAME) == 0
-    }
-    assert c.create(NAME, PKGS) == 0
-    c.activate(NAME)
-    assert c.environment_name == NAME
-    assert c.provides(NAME) == true
-}
-*/
