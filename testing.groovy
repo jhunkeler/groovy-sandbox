@@ -2,8 +2,8 @@ import edu.stsci.*
 
 static void main(String[] args) {
     final String PREFIX = "/tmp/miniconda3"
-    final String NAME = "astroconda35"
-    final String PKGS = "python=3.5 numpy=1.12 drizzlepac"
+    final String NAME = "py36"
+    final String PKGS = "python=3.6 numpy astropy"
 
     cinst = new CondaInstaller(PREFIX)
     cinst.install()
@@ -12,9 +12,7 @@ static void main(String[] args) {
     assert c.prefix_exists == true
 
     c.override = true
-    c.channels.add("astropy")
     c.channels.add("http://ssb.stsci.edu/astroconda")
-    c.channels.add("conda-forge")
 
     if (c.provides(NAME)) {
         assert c.destroy(NAME) == 0
@@ -23,5 +21,6 @@ static void main(String[] args) {
     c.activate(NAME)
     assert c.environment_name == NAME
     assert c.provides(NAME) == true
+    c.runshell("python --version")
 }
 
