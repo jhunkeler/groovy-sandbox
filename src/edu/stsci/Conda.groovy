@@ -1,6 +1,7 @@
 package edu.stsci
 
 class Conda implements Serializable {
+    private String ident
     public String prefix
     public boolean prefix_exists
     public Map<String, String> shell_environment
@@ -9,6 +10,7 @@ class Conda implements Serializable {
     public boolean override
 
     Conda (prefix) {
+        this.ident = '[CONDA]'
         this.prefix = prefix
         this.prefix_exists = new File(this.prefix).exists()
         this.shell_environment = [:]
@@ -125,7 +127,7 @@ class Conda implements Serializable {
             }
         }
 
-        println("[CONDA] ${cmd}")
+        println("${this.ident} ${cmd}")
         return this.runshell(cmd)
     }
 
