@@ -45,9 +45,9 @@ class CondaInstaller implements Serializable {
             return 0xFF
         }
 
-        if (!new File(this.installer).exists()) {
+        //if (!new File(this.installer).exists()) {
             this.download()
-        }
+        //}
 
         def cmd = "bash ${this.installer} -b -p ${this.prefix}"
         def proc = cmd.execute()
