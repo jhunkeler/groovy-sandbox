@@ -3,8 +3,10 @@ import edu.stsci.OSInfo
 
 class CondaInstaller implements Serializable {
     OSInfo os
+    private String ident
     String prefix
     String dist_version
+    String installer
     String url
     def dist = [:]
 
@@ -17,36 +19,37 @@ class CondaInstaller implements Serializable {
                        variant: variant,
                        baseurl: 'https://repo.continuum.io/archive']
         ]
+
+	this.ident = '[CONDA INSTALLER]'
         this.os = new OSInfo()
         this.dist = distributions."${dist}"
         this.dist_version = version
         this.prefix = prefix
-        this.url = "${this.dist.baseurl}/" +
-                  "${this.dist.name}${this.dist.variant}-" +
-                  "${this.dist_version}-${this.os.name}-${this.os.arch}.sh"
+	this.installer = "${this.dist.name}${this.dist.variant}-" +
+                         "${this.dist_version}-${this.os.name}-${this.os.arch}.sh"
+        this.url = "${this.dist.baseurl}/" + this.installer
     }
 
     void download() {
-
-        println("Downloading $url")
-        File fp = new File('installer.sh')
-        def installer = fp.newOutputStream()
-        installer << new URL(this.url).openStream()
-        installer.close()
-        println("Received ${fp.length()} bytes")
+        println("${this.ident} Downloading $url")
+        File fp = new File(this.installer)
+        def body = fp.newOutputStream()
+        body << new URL(this.url).openStream()
+        body.close()
+        println("${this.ident} Received ${fp.length()} bytes")
     }
 
     int install() {
         if (new File(this.prefix).exists()) {
-            println("Skipping installation: ${this.prefix} exists.")
+            println("${this.ident} ${this.prefix} exists.")
             return 0xFF
         }
 
-        if (!new File('installer.sh').exists()) {
+        if (!new File(this.installer).exists()) {
             this.download()
         }
 
-        def cmd = "bash installer.sh -b -p ${this.prefix}"
+        def cmd = "bash ${this.installer} -b -p ${this.prefix}"
         def proc = cmd.execute()
         def stdout = new StringBuffer()
 
