@@ -32,11 +32,18 @@ class CondaInstaller implements Serializable {
 
     void download() {
         println("${this.ident} Downloading $url")
+        cmd = "curl -qL ${this.url}"
+        proc = cmd.execute()
+        proc.inputStream.eachLine { println(it) }
+
+        // Whatever Jenkins...
+        /*
         File fp = new File(this.installer)
         def body = fp.newOutputStream()
         body << new URL(this.url).openStream()
         body.close()
         println("${this.ident} Received ${fp.length()} bytes")
+        */
     }
 
     int install() {
