@@ -30,13 +30,17 @@ class CondaInstaller implements Serializable {
         this.url = "${this.dist.baseurl}/" + this.installer
     }
 
-    void download() {
+    int download() {
         println("${this.ident} Downloading $url")
-        def cmd = "curl -qL ${this.url}"
-        def proc = cmd.execute()
+        def proc = ["bash", "-c", "curl -sLO ${this.url}"].execute()
+        def out = new StringBuffer()
+        def err = new StringBuffer()
+        proc.consumeProcessOutput(out, err)
         proc.waitFor()
 
-        // Whatever Jenkins...
+        if (out.size() > 0) println(out)
+        if (err.size() > 0) println(err)
+        // Whatever Jenkins... Why is this so hard?
         /*
         File fp = new File(this.installer)
         def body = fp.newOutputStream()
