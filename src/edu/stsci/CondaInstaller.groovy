@@ -60,10 +60,9 @@ class CondaInstaller implements Serializable {
         return p
     }
 
-    int download() {
+    void download() {
         println("${this.ident} Downloading $url")
         def proc = this.runshell("curl -sLO ${this.url}")
-        return proc.exitValue()
 
         // Whatever Jenkins... Why is this so hard?
         /*
@@ -75,7 +74,7 @@ class CondaInstaller implements Serializable {
         */
     }
 
-    int install() {
+    void install() {
         if (new File(this.prefix).exists()) {
             println("${this.ident} ${this.prefix} exists.")
             return 0xFF
@@ -85,16 +84,7 @@ class CondaInstaller implements Serializable {
             this.download()
         //}
 
-        def cmd = "bash ${this.installer} -b -p ${this.prefix}"
-        def proc = cmd.execute()
-        def stdout = new StringBuffer()
-
-        proc.inputStream.eachLine { println(it) }
-
-        //proc.waitForProcessOutput(stdout, System.err)
-        //print(stdout.toString())
-
-        return proc.exitValue()
+        this.runshell("bash ${this.installer} -b -p ${this.prefix}")
     }
 
     private void detect() {
