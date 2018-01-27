@@ -34,7 +34,7 @@ class CondaInstaller implements Serializable {
         println("${this.ident} Downloading $url")
         def cmd = "curl -qL ${this.url}"
         def proc = cmd.execute()
-        def proc.inputStream.eachLine { println(it) }
+        proc.inputStream.eachLine { println(it) }
 
         // Whatever Jenkins...
         /*
