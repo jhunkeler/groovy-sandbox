@@ -3,6 +3,7 @@ import edu.stsci.OSInfo
 
 class CondaInstaller implements Serializable {
     OSInfo os
+    public Map<String, String> shell_environment
     private String ident
     String prefix
     String dist_version
@@ -25,9 +26,38 @@ class CondaInstaller implements Serializable {
         this.dist = distributions."${dist}"
         this.dist_version = version
         this.prefix = prefix
+        this.shell_environment = [:]
 	this.installer = "${this.dist.name}${this.dist.variant}-" +
                          "${this.dist_version}-${this.os.name}-${this.os.arch}.sh"
         this.url = "${this.dist.baseurl}/" + this.installer
+    }
+
+    private def runshell(String args, silent=false) {
+        def cmd = new String[3]
+        def proc_env = [:]
+
+        if (this.shell_environment) {
+            proc_env = this.shell_environment
+        }
+
+        cmd[0] = 'bash'
+        cmd[1] = '-c'
+        cmd[2] = args
+
+        def process = new ProcessBuilder(cmd)
+        process.redirectErrorStream(true)
+        Map<String, String> env_tmp = process.environment()
+
+        if (proc_env) {
+            env_tmp <<= proc_env
+        }
+
+        Process p = process.start()
+        if (!silent) {
+            p.inputStream.eachLine { println it}
+        }
+        p.waitFor()
+        return p
     }
 
     int download() {
